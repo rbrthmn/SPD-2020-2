@@ -1,10 +1,11 @@
-package Atividade2;
+package Atividade3;
 
-import com.google.gson.Gson;
+import com.thoughtworks.xstream.XStream;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Principal {
     public static void main(String[] args) throws IOException {
@@ -21,23 +22,28 @@ public class Principal {
     }
 
     private static void gravador(Funcionario funcionario) throws IOException {
-        Gson gson = new Gson();
+        XStream xstream = new XStream();
+        String xmlGerado = xstream.toXML(funcionario);
+
         FileWriter arquivo = new FileWriter("src/" + funcionario.getCpf() + ".txt");
         PrintWriter gravador = new PrintWriter(arquivo);
 
-        gravador.println(gson.toJson(funcionario));
+        gravador.println(xmlGerado);
         arquivo.close();
     }
 
     private static void leitor(String cpf) {
-        Gson gson = new Gson();
         try {
+            XStream xstream = new XStream();
+            xstream.alias("funcionario", Funcionario.class);
+            xstream.useAttributeFor(Funcionario.class, "cargo");
+
             FileReader arquivo = new FileReader("src/" + cpf + ".txt");
             BufferedReader ler = new BufferedReader(arquivo);
 
-            String json = ler.readLine();
-            Funcionario funcionario = gson.fromJson(json, Funcionario.class);
-            System.out.println(funcionario.getNome());
+            String xml = ler.lines().collect(Collectors.joining());
+            Funcionario f = (Funcionario) xstream.fromXML(xml);
+            System.out.println(f.getHabilidades());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             System.out.println("Arquivo não encontrado!");
