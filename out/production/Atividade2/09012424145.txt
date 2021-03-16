@@ -1,0 +1,12 @@
+<Funcionario>
+  <cpf>09012424145</cpf>
+  <nome>Alberto</nome>
+  <idade>23</idade>
+  <salario>1983.5</salario>
+  <cargo>Deusenvolvedor</cargo>
+  <habilidades>
+    <string>CSS</string>
+    <string>HTML5</string>
+    <string>Javascript</string>
+  </habilidades>
+</Funcionario>
